@@ -31,9 +31,25 @@ class _NewExpenseState extends State<NewExpense> {
     // .then((value) {})
   }
 
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(
+      _amountController.text,
+    ); // tryParse('Hello') => null, tryParse('1.12') => 1.12
+    final amountIsInvalid =
+        enteredAmount == null ||
+        enteredAmount <=
+            0; // if amount is null or less than or equal to 0, then it's invalid
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      // show error message
+    }
+  }
+
   @override
   void dispose() {
-    _titleController.dispose(); // always dispose
+    _titleController
+        .dispose(); // always dispose, dispose is called when the widget is removed from the widget tree, it helps to free up resources and prevent memory leaks
     _amountController.dispose();
     super.dispose();
   }
@@ -126,10 +142,7 @@ class _NewExpenseState extends State<NewExpense> {
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  print(_titleController.text);
-                  print(_amountController.text);
-                },
+                onPressed: _submitExpenseData,
                 child: const Text('Save Expense'),
               ),
             ],
