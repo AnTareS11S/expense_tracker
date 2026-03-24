@@ -42,7 +42,24 @@ class _NewExpenseState extends State<NewExpense> {
     if (_titleController.text.trim().isEmpty ||
         amountIsInvalid ||
         _selectedDate == null) {
-      // show error message
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Invalid input'),
+          content: const Text(
+            'Please make sure a valid title, amount, and date was entered...',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('Okay'),
+            ),
+          ],
+        ),
+      );
+      return; // return is used to exit the function early, so that the code below it won't be executed if the input is invalid
     }
   }
 
@@ -99,7 +116,9 @@ class _NewExpenseState extends State<NewExpense> {
                     Text(
                       _selectedDate == null
                           ? 'No date selected'
-                          : formatter.format(_selectedDate!),
+                          : formatter.format(
+                              _selectedDate!,
+                            ), // ! means that we are sure that _selectedDate is not null, because we check it in the ternary operator
                     ),
                     IconButton(
                       onPressed: _presentDatePicker,
