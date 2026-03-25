@@ -43,13 +43,44 @@ class _Expenses extends State<Expenses> {
   }
 
   void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
       _registeredExpenses.remove(expense);
     });
+    ScaffoldMessenger.of(
+      context,
+    ).clearSnackBars(); // clearSnackBars is used to clear any existing snack bars before showing a new one, so that if the user deletes multiple expenses in a row, they won't see multiple snack bars stacked on top of each other
+    ScaffoldMessenger.of(context).showSnackBar(
+      // showSnackBar is used to show a snack bar at the bottom of the screen, it's used to show a message to the user after they delete an expense, and also to provide an option to undo the deletion
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text('Expense deleted.'),
+        action: SnackBarAction(
+          // SnackBarAction is used to add an action button to the snack bar, in this case, it's used to provide an option to undo the deletion of the expense
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Center(
+      child: Text('No expenses found. Start adding some!'),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutter ExpenseTracker'),
@@ -63,12 +94,7 @@ class _Expenses extends State<Expenses> {
       body: Column(
         children: [
           const Text('The chart'),
-          Expanded(
-            child: ExpensesList(
-              expenses: _registeredExpenses,
-              onRemoveExpense: _removeExpense,
-            ),
-          ),
+          Expanded(child: mainContent),
         ],
       ),
     );
