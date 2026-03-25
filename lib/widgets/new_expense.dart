@@ -4,7 +4,8 @@ import 'package:expense_tracker/models/expense.dart';
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key, required this.onAddExpense});
 
-  final void Function(Expense expense) onAddExpense;
+  final void Function(Expense expense)
+  onAddExpense; // this is a function that takes an Expense as an argument and returns void, it's used to pass the new expense data back to the parent widget (Expenses) when the user submits the form
 
   @override
   State<NewExpense> createState() {
