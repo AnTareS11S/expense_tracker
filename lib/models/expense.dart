@@ -37,6 +37,11 @@ class Expense {
 class ExpenseBucket {
   const ExpenseBucket({required this.category, required this.expenses});
 
+  ExpenseBucket.forCategory(List<Expense> allExpenses, this.category)
+    : expenses = allExpenses
+          .where((expense) => expense.category == category)
+          .toList(); // this constructor is used to create an ExpenseBucket for a specific category, it takes a list of all expenses and filters it to only include expenses that belong to the specified category
+
   final Category category;
   final List<Expense> expenses;
 
