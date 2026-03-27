@@ -21,6 +21,14 @@ class ExpensesList extends StatelessWidget {
         key: ValueKey(
           expenses[index],
         ), // ValueKey is used to identify the widget that should be dismissed, it takes a unique value (in this case, the expense object itself) to identify the widget
+        background: Container(
+          color: Theme.of(context).colorScheme.error.withValues(
+            alpha: 0.75,
+          ),
+          margin: EdgeInsets.symmetric(
+            horizontal: Theme.of(context).cardTheme.margin!.horizontal,
+          ),
+        ),
         onDismissed: (direction) {
           onRemoveExpense(
             expenses[index],
